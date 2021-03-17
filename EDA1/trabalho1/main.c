@@ -2,56 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-int contaPalavras(FILE *arquivo) {
-    char c;
-    int palavras = 1;
-
-    while(1) {
-        c = fgetc(arquivo);
-        if(c == '\n') {
-            palavras++;
-        }
-        if(c == EOF) {
-            break;
-        }
-    }
-    return palavras;
-}
-
-void retiraPontuacao(char *palavra) {
-    char pontuacao[6] = {'\n', ' ', '.', ',', ';', ':'};
-    int tamanho = strlen(palavra);
-
-    for(int i = 0; i < strlen(palavra); i++) {
-        if(palavra[tamanho-1] == pontuacao[i]) {
-            palavra[tamanho-1] = '\0';
-            break;
-        }
-    }
-}
-
-void calculaBOW(FILE *dicionario, FILE *TR, int *cont) {
-    char palavraD[40] = "";
-    char palavraTR[40] = "";
-    int i = 0;
-    int tamanho_palavra;
-
-    fseek(dicionario, 0, SEEK_SET);
-    do {
-        fseek(TR, 0, SEEK_SET);
-        fscanf(dicionario, "%s", palavraD);
-        printf("%s\n", palavraD);
-        while(!feof(TR)) {
-            fscanf(TR, "%s", palavraTR);
-            retiraPontuacao(palavraTR);
-            if(strcmp(palavraD, palavraTR) == 0) {
-                cont[i]++;
-            }
-        }
-        i++;
-    } while(!feof(dicionario));
-}
+#include "retirarPontuacao.c"
+#include "contaPalavras.c"
+#include "CalculaBOW.c"
 
 int main() {
     char nome_arquivo[30] = "";
