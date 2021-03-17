@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 
-void retiraPontuacao(char *palavra) {
+void retirarPontuacao(char *palavra) {
     char pontuacao[6] = {'\n', ' ', '.', ',', ';', ':'};
     int tamanho = strlen(palavra);
 
