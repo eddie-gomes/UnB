@@ -2,17 +2,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "retirarPontuacao.c"
 #include "contaPalavras.c"
-#include "CalculaBOW.c"
+#include "calculaBOW.c"
 
 int main() {
     char nome_arquivo[30] = "";
     int *contA, *contB;
     FILE *dicionario = NULL;
     FILE *TRA = NULL;
+    FILE *TRB = NULL;
+    char *nomeDicionario;
     char opcao = '0';
-    int num;
+    int *num;
+    char * vetorDicionario;
 
     while(opcao != 'S') {
         printf("\n################## Trabalho 1 ##################");
@@ -28,16 +30,16 @@ int main() {
 
             case 'D':
                 printf("Arquivo de dicionario: ");
-                scanf("%s", nome_arquivo); // Escaneia nome do arquivo Dicionário
+                scanf("%s", nomeDicionario); // Escaneia nome do arquivo Dicionário
                 if(dicionario != NULL) { // Caso o arquivo Dicionário já estiver aberto, fecha e abre outro
                     fclose(dicionario);
                 }
-                dicionario = fopen(nome_arquivo, "r"); // Lê o arquivo Dicionário de nome igual ao escaneado na linha 31
+                dicionario = fopen(nomeDicionario, "r"); // Lê o arquivo Dicionário de nome igual ao escaneado na linha 31
                 if(dicionario == NULL) { // Caso falhe em localizar o arquivo Dicionário, printa o erro e volta a tela inicial.
                     printf("Nao foi possivel abrir o arquivo\n");
                 } else {
-                    printf("%s aberto!\n", nome_arquivo);
-                    num = contaPalavras(dicionario); // Conta a quantidade de palavras do arquivo Dicionario
+                    num = contaPalavras(dicionario);
+                    printf("%s aberto!\n", nomeDicionario);
                     contA = (int*) calloc(num, sizeof(int)); // Alocação do ponteiro A de tamanho igual a quantidade de palavras do arquivo Dicionário
                     contB = (int*) calloc(num, sizeof(int)); // Alocação do ponteiro B de tamanho igual a quantidade de palavras do arquivo Dicionário
                 }
@@ -66,6 +68,39 @@ int main() {
                     }
                 }
                 break;
+
+                case 'B':
+                printf("Arquivo de referencia B: ");
+                scanf("%s", nome_arquivo); // Escaneia nome do texto de referência A (TRA)
+                if(TRB != NULL) { // Caso o TRA já esteja aberto, fecha
+                    fclose(TRB);
+                }
+                TRB = fopen(nome_arquivo, "r"); // Abre o TRA de nome igual ao escaneado na linha 48
+                if(TRB == NULL) { // Caso não seja possível abrir o arquivo TRA, printa erro
+                    printf("Nao foi possivel abrir o arquivo\n");
+                } else {
+                    printf("%s aberto!\n", nome_arquivo);
+                    if(dicionario == NULL) {
+                        printf("Nao foi possivel abrir o arquivo dicionario\n");
+                    } else {
+                        calculaBOW(dicionario, TRB, contB);
+                    }
+                }
+                break;
+            
+            case 'E':
+            vetorDicionario = (int*) calloc(num, sizeof(int));
+            vetorDicionario = strtok(dicionario,'\n');
+            printf("\nPalavras \t\t Texto A(#) \t\t Texto B(#)");
+                for(int x = 0; x < num; x++) {
+                    printf("\nPalavras \t\t Texto A(#) \t\t Texto B(#)");
+                        if(contA[x] != 0 || contB[x] != 0){
+                            printf("\n%s \t\t %d \t\t %d\n", vetorDicionario[x], contA[x], contB[x]);
+                         };
+                };
+
+            break;
+
             case 'S':
                 break;
         }

@@ -4,7 +4,7 @@
 #include <ctype.h>
 #include "retirarPontuacao.c"
 
-void calculaBOW(FILE *dicionario, FILE *TRA, int *cont) {
+void calculaBOW(FILE *dicionario, FILE *TR, int *cont) {
     char palavraD[40] = "";
     char palavraTR[40] = "";
     int i = 0;
@@ -12,15 +12,13 @@ void calculaBOW(FILE *dicionario, FILE *TRA, int *cont) {
 
     fseek(dicionario, 0, SEEK_SET);
     do {
-        fseek(TRA, 0, SEEK_SET);
+        fseek(TR, 0, SEEK_SET);
         fscanf(dicionario, "%s", palavraD);
         printf("%s\n", palavraD);
-        while(!feof(TRA)) {
-            strlwr((char *)fscanf(TRA, "%s", palavraTR));
+        while(!feof(TR)) {
+            fscanf(TR, "%s", palavraTR);
             retirarPontuacao(palavraTR);
-            printf("-------------%s-----------------", palavraTR);
-            if(strcmp(palavraD, palavraTR) == 0) {
-                printf("TESTE TESTE %s", palavraTR);
+            if(strcmp(strlwr(palavraD), strlwr(palavraTR)) == 0) {
                 cont[i]++;
             }
         }
